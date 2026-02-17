@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار القدرات اللفظي - النموذج الثالث</title>
+    <title>اختبار القدرات اللفظي - النموذج الثالث (المطور)</title>
     <style>
         :root { --primary-color: #c0392b; --secondary-color: #e67e22; --bg-color: #fdf2f2; --white: #ffffff; --correct-bg: #d4edda; --wrong-bg: #f8d7da; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .quiz-card { background: var(--white); width: 95%; max-width: 850px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid var(--primary-color); text-align: center; }
         .header-info { margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        .challenger-badge { background: var(--secondary-color); color: white; padding: 8px 20px; border-radius: 30px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
+        .challenger-badge { background: var(--secondary-color); color: white; padding: 8px 20px; border-radius: 30px; font-weight: bold; display: inline-block; margin-bottom: 20px; font-size: 1.2rem; }
         input[type="text"] { width: 80%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.1rem; margin: 20px 0; outline: none; text-align: center; }
         .btn { background: var(--primary-color); color: white; padding: 12px 30px; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin: 5px; }
         .btn:hover { background: #a93226; }
@@ -32,11 +32,11 @@
     <div class="header-info">
         <div style="font-weight: bold; color: var(--primary-color);">ثانوية الأمير عبدالمجيد</div>
         <div style="color: #7f8c8d;">أ / عبدالعزيز الفيفي</div>
-        <h1>اختبار القدرات - النموذج الثالث</h1>
+        <h1>اختبار القدرات - النموذج الثالث (المطور)</h1>
     </div>
 
     <div id="start-page">
-        <p>مرحباً بك في تحدي التناظر اللفظي (النموذج 3)</p>
+        <p>مرحباً بك في تحدي علاقات (السبب والنتيجة) و (التدرج والمرحلية)</p>
         <input type="text" id="studentName" placeholder="اكتب اسمك هنا لبدء التحدي...">
         <br>
         <button class="btn" onclick="startQuiz()">ابدأ التحدي</button>
@@ -57,33 +57,38 @@
 
     <div id="result-page" class="hidden">
         <h2 id="score-text"></h2>
-        <div id="quiz-summary"></div>
+        <div id="quiz-summary" style="max-height: 400px; overflow-y: auto;"></div>
         <button class="btn" onclick="location.reload()">إعادة الاختبار</button>
     </div>
 </div>
 
 <script>
     const masterQuestions = [
-        { q: "فيروس : مرض", correct: "اجتهاد : نجاح", a: ["اجتهاد : نجاح", "غرق : موت", "نار : حرق", "تفكير : حل"], why: "العلاقة (سبب ونتيجة): الفيروس سبب للمرض والاجتهاد سبب للنجاح." },
-        { q: "غرق : موت", correct: "نار : حرق", a: ["نار : حرق", "تفكير : حل", "إهمال : رسوب", "سرعة : حادث"], why: "العلاقة (سبب ونتيجة): الغرق يؤدي للموت والنار تؤدي للحرق." },
-        { q: "إهمال : رسوب", correct: "سرعة : حادث", a: ["سرعة : حادث", "تفكير : حل", "جوع : أكل", "عطش : شرب"], why: "العلاقة (سبب ونتيجة): الإهمال سبب الرسوب والسرعة سبب الحادث." },
-        { q: "نجاح : اجتهاد", correct: "حل : تفكير", a: ["حل : تفكير", "حرق : نار", "حادث : سرعة", "شبع : أكل"], why: "العلاقة (نتيجة وسبب): النجاح نتيجة الاجتهاد والحل نتيجة التفكير." },
-        { q: "حادث : سرعة", correct: "مرض : فيروس", a: ["مرض : فيروس", "شبع : أكل", "ري : ماء", "فهم : شرح"], why: "العلاقة (نتيجة وسبب): الحادث نتيجة السرعة والمرض نتيجة الفيروس." },
-        { q: "يرقة : فراشة", correct: "هلال : بدر", a: ["هلال : بدر", "رضيع : شاب", "بذرة : شجرة", "عجين : خبز"], why: "العلاقة (مرحلية/تحول): اليرقة تصبح فراشة والهلال يصبح بدراً." },
-        { q: "بذرة : شجرة", correct: "نواة : نخلة", a: ["نواة : نخلة", "عجين : خبز", "ماء : ثلج", "بيضة : دجاجة"], why: "العلاقة (مرحلية): البذرة تنمو لتكون شجرة والنواة تنمو لتكون نخلة." },
-        { q: "بيضة : دجاجة", correct: "يرقة : فراشة", a: ["يرقة : فراشة", "نطفة : جنين", "طفل : رجل", "برعم : زهرة"], why: "العلاقة (مرحلية): البيضة تفقس دجاجة واليرقة تتحول لفراشة." },
-        { q: "دافئ : حار", correct: "ابتسامة : ضحكة", a: ["ابتسامة : ضحكة", "رمادي : أسود", "خوف : رعب", "قناعة : غنى"], why: "العلاقة (تدرج في الشدة): الدافئ يشتد فيصبح حاراً والابتسامة تشتد فتصبح ضحكة." },
-        { q: "خوف : رعب", correct: "رمادي : أسود", a: ["رمادي : أسود", "قناعة : غنى", "عدو : ركض", "هدم : دمار"], why: "العلاقة (تدرج في الشدة): الخوف الشديد رعب والرمادي الغامق يقترب من الأسود." },
-        { q: "موت : غرق", correct: "حرق : نار", a: ["حرق : نار", "رسوب : إهمال", "نجاح : اجتهاد", "شبع : أكل"], why: "العلاقة (نتيجة وسبب): الموت قد يسببه الغرق والحرق تسببه النار." },
-        { q: "فراشة : يرقة", correct: "بدر : هلال", a: ["بدر : هلال", "شجرة : بذرة", "خبز : عجين", "دجاجة : بيضة"], why: "العلاقة (مرحلية عكسية): الفراشة كانت يرقة والبدر كان هلالاً." },
-        { q: "نخلة : نواة", correct: "شجرة : بذرة", a: ["شجرة : بذرة", "جنين : نطفة", "رجل : طفل", "زهرة : برعم"], why: "العلاقة (مرحلية عكسية): النخلة أصلها نواة والشجرة أصلها بذرة." },
-        { q: "ضحكة : ابتسامة", correct: "حار : دافئ", a: ["حار : دافئ", "رعب : خوف", "أسود : رمادي", "عدو : مشي"], why: "العلاقة (تدرج عكسي): الضحكة أقوى من الابتسامة والحار أقوى من الدافئ." preference: "inverse intensity" },
-        { q: "تعب : ركض", correct: "عطش : حر", a: ["عطش : حر", "فهم : تركيز", "نوم : سهر", "جوع : صيام"], why: "العلاقة (نتيجة وسبب): التعب نتيجة الركض والعطش نتيجة الحر." },
-        { q: "تركيز : فهم", correct: "قراءة : ثقافة", a: ["قراءة : ثقافة", "سعي : رزق", "نوم : راحة", "أكل : شبع"], why: "العلاقة (سبب ونتيجة): التركيز يؤدي للفهم والقراءة تؤدي للثقافة." },
-        { q: "رزق : سعي", correct: "راحة : نوم", a: ["راحة : نوم", "شبع : أكل", "ثقافة : قراءة", "نجاح : مذاكرة"], why: "العلاقة (نتيجة وسبب): الرزق يأتي من السعي والراحة تأتي من النوم." },
-        { q: "بناء : عمارة", correct: "تأليف : كتاب", a: ["تأليف : كتاب", "صناعة : سيارة", "زراعة : حقل", "طبخ : طعام"], why: "العلاقة (عملية ومنتجها): البناء ينتج عنه عمارة والتأليف ينتج عنه كتاب." },
-        { q: "طعام : طبخ", correct: "سيارة : صناعة", a: ["سيارة : صناعة", "خبز : خبيز", "ثوب : خياطة", "لوحة : رسم"], why: "العلاقة (المنتج والعملية): الطعام يحتاج طبخ والسيارة تحتاج صناعة." },
-        { q: "عجين : خبز", correct: "رمل : زجاج", a: ["رمل : زجاج", "خشب : كرسي", "حديد : سيارة", "قطن : قماش"], why: "العلاقة (مادة خام ومنتج): العجين يُصنع منه خبز والرمل يُصنع منه زجاج." }
+        // علاقة سبب ونتيجة
+        { q: "فيروس : مرض", correct: "اجتهاد : نجاح", a: ["اجتهاد : نجاح", "دواء : شفاء", "غرق : موت", "نار : حرق"], why: "العلاقة (سبب ونتيجة): الفيروس يؤدي للمرض والاجتهاد يؤدي للنجاح." },
+        { q: "إهمال : رسوب", correct: "سرعة : حادث", a: ["سرعة : حادث", "تفكير : حل", "جوع : أكل", "حرارة : انصهار"], why: "العلاقة (سبب ونتيجة): الإهمال يسبب الرسوب والسرعة تسبب الحادث." },
+        { q: "تعب : ركض", correct: "شبع : أكل", a: ["شبع : أكل", "نوم : سهر", "عطش : ماء", "نجاح : مذاكرة"], why: "العلاقة (نتيجة وسبب): التعب نتيجة الركض والشبع نتيجة الأكل." },
+        
+        // علاقة مرحلية (تدرج)
+        { q: "يرقة : فراشة", correct: "هلال : بدر", a: ["هلال : بدر", "بذرة : شجرة", "طفل : شاب", "نطفة : جنين"], why: "العلاقة (مرحلية): اليرقة تتحول لفراشة والهلال يتحول لبدر." },
+        { q: "بذرة : شجرة", correct: "نواة : نخلة", a: ["نواة : نخلة", "عجين : خبز", "بيضة : دجاجة", "دقيق : كعك"], why: "العلاقة (مرحلية): البذرة تصبح شجرة والنواة تصبح نخلة." },
+        { q: "دافئ : حار", correct: "ابتسامة : ضحكة", a: ["ابتسامة : ضحكة", "رمادي : أسود", "خوف : رعب", "مشية : ركضة"], why: "العلاقة (تدرج في الشدة): الحار أشد من الدافئ والضحكة أشد من الابتسامة." },
+        
+        // أسئلة جديدة مضافة للتنوع
+        { q: "غيم : مطر", correct: "مقدمة : نتيجة", a: ["مقدمة : نتيجة", "ليل : فجر", "شمس : نهار", "برد : ثلج"], why: "العلاقة (تتابع وسببية): الغيم يسبق المطر والمقدمة تسبق النتيجة." },
+        { q: "عجين : خبز", correct: "رمل : زجاج", a: ["رمل : زجاج", "خشب : باب", "حديد : سيارة", "قطن : ثوب"], why: "العلاقة (تحول ومرحلية): العجين يتحول لخبز والرمل يتحول لزجاج." },
+        { q: "نوم : راحة", correct: "قراءة : ثقافة", a: ["قراءة : ثقافة", "سفر : تعب", "أكل : وزن", "ضحك : سرور"], why: "العلاقة (سبب ونتيجة): النوم سبب للراحة والقراءة سبب للثقافة." },
+        { q: "غضب : زلل", correct: "تأنٍ : سلامة", a: ["تأنٍ : سلامة", "سرعة : وصول", "تهور : شجاعة", "خوف : هروب"], why: "العلاقة (سبب ونتيجة): الغضب يسبب الخطأ (الزلل) والتأني يسبب السلامة." },
+        { q: "طفل : رجل", correct: "شتلة : شجرة", a: ["شتلة : شجرة", "نواة : تمرة", "بيضة : طائر", "يرقة : حشرة"], why: "العلاقة (مرحلية نمو): الطفل يكبر ليصبح رجلاً والشتلة تكبر لتصبح شجرة." },
+        { q: "رمادي : أسود", correct: "خوف : رعب", a: ["خوف : رعب", "فاتح : غامق", "دافئ : بارد", "قليل : كثير"], why: "العلاقة (تدرج): الأسود درجة أشد من الرمادي والرعب درجة أشد من الخوف." },
+        { q: "زلزال : دمار", correct: "فتنة : تفرق", a: ["فتنة : تفرق", "نار : دخان", "ماء : حياة", "علم : نور"], why: "العلاقة (سبب ونتيجة): الزلزال ينتج عنه دمار والفتنة ينتج عنها تفرق." },
+        { q: "مذاكرة : نجاح", correct: "تمرين : لياقة", a: ["تمرين : لياقة", "كتاب : علم", "قلم : خط", "رسم : لوحة"], why: "العلاقة (سبب ونتيجة): المذاكرة تؤدي للنجاح والتمرين يؤدي للياقة." },
+        { q: "تحمل : انفجار", correct: "ضغط : غليان", a: ["ضغط : غليان", "صبر : فرج", "حب : زواج", "كره : عداوة"], why: "العلاقة (تدرج يؤدي لنتيجة): التحمل الزائد يؤدي لانفجار والضغط يؤدي لغليان." },
+        { q: "موت : غرق", correct: "إصابة : حادث", a: ["إصابة : حادث", "قتل : سلاح", "مرض : عدوى", "حرق : نار"], why: "العلاقة (نتيجة وسبب): الموت قد يكون سببه الغرق والإصابة سببها الحادث." },
+        { q: "رعشة : خوف", correct: "عرق : مجهود", a: ["عرق : مجهود", "ضحك : فرح", "دمع : حزن", "نوم : تعب"], why: "العلاقة (نتيجة وعلامة): الرعشة تظهر بسبب الخوف والعرق يظهر بسبب المجهود." },
+        { q: "خسوف : قمر", correct: "صدا : حديد", a: ["صدا : حديد", "كسوف : شمس", "رياح : غبار", "مطر : سيل"], why: "العلاقة (عارض يطرأ على الشيء): الخسوف يطرأ على القمر والصدأ يطرأ على الحديد." },
+        { q: "بداية : نهاية", correct: "ولادة : وفاة", a: ["ولادة : وفاة", "دخول : خروج", "فتح : إغلاق", "صعود : هبوط"], why: "العلاقة (تضاد ومرحلية): البداية عكسها النهاية والولادة عكسها الوفاة." },
+        { q: "نطفة : علقة", correct: "خشب : فحم", a: ["خشب : فحم", "ماء : ثلج", "نهار : ليل", "غيم : مطر"], why: "العلاقة (مرحلية): النطفة تصبح علقة والخشب (بالاحتراق) يصبح فحماً." }
     ];
 
     let questions = []; let currentQ = 0; let score = 0; let timer; let timeLeft = 45; let userAnswers = [];
@@ -97,8 +102,9 @@
     }
 
     function startQuiz() {
-        const name = document.getElementById('studentName').value.trim();
-        if(!name) { alert("من فضلك اكتب اسمك"); return; }
+        const nameInput = document.getElementById('studentName');
+        const name = nameInput.value.trim();
+        if(!name) { alert("من فضلك اكتب اسمك لبدء التحدي"); return; }
         document.getElementById('display-name').innerText = name;
         questions = shuffle([...masterQuestions]);
         document.getElementById('start-page').classList.add('hidden');
@@ -110,15 +116,19 @@
         if(currentQ >= questions.length) { finishQuiz(); return; }
         const qData = questions[currentQ];
         const shuffledOptions = shuffle([...qData.a]);
+        
         document.getElementById('q-num').innerText = currentQ + 1;
         document.getElementById('question-text').innerText = qData.q;
         document.getElementById('feedback').style.display = 'none';
         document.getElementById('next-btn').classList.add('hidden');
+        
         const optDiv = document.getElementById('options');
         optDiv.innerHTML = '';
+        
         shuffledOptions.forEach(opt => {
             const d = document.createElement('div');
-            d.className = 'option'; d.innerText = opt;
+            d.className = 'option';
+            d.innerText = opt;
             d.onclick = () => checkAnswer(opt, d);
             optDiv.appendChild(d);
         });
@@ -126,13 +136,18 @@
     }
 
     function startTimer() {
-        clearInterval(timer); timeLeft = 45;
+        clearInterval(timer);
+        timeLeft = 45;
         const line = document.getElementById('timer-line');
         const txt = document.getElementById('timer-text');
         timer = setInterval(() => {
-            timeLeft--; txt.innerText = timeLeft;
+            timeLeft--;
+            txt.innerText = timeLeft;
             line.style.width = (timeLeft/45)*100 + '%';
-            if(timeLeft <= 0) { clearInterval(timer); checkAnswer(null, null); }
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                checkAnswer(null, null);
+            }
         }, 1000);
     }
 
@@ -140,24 +155,46 @@
         clearInterval(timer);
         const qData = questions[currentQ];
         const isCorrect = (sel === qData.correct);
-        userAnswers.push({ q: qData.q, sel: sel || "تجاوز الوقت", cor: qData.correct, isCorrect, why: qData.why });
+        
+        userAnswers.push({
+            q: qData.q,
+            sel: sel || "تجاوز الوقت",
+            cor: qData.correct,
+            isCorrect: isCorrect,
+            why: qData.why
+        });
+
         document.querySelectorAll('.option').forEach(o => o.onclick = null);
-        if(isCorrect) { score++; if(el) el.classList.add('correct-opt'); } 
-        else { if(el) el.classList.add('wrong-opt'); document.querySelectorAll('.option').forEach(o => { if(o.innerText === qData.correct) o.classList.add('correct-opt'); }); }
+
+        if(isCorrect) {
+            score++;
+            if(el) el.classList.add('correct-opt');
+        } else {
+            if(el) el.classList.add('wrong-opt');
+            document.querySelectorAll('.option').forEach(o => {
+                if(o.innerText === qData.correct) o.classList.add('correct-opt');
+            });
+        }
+
         const f = document.getElementById('feedback');
-        f.innerHTML = `<strong>${isCorrect ? '✅ رائع' : '❌ خطأ'}</strong><br>${qData.why}`;
+        f.innerHTML = `<strong>${isCorrect ? '✅ رائع!' : '❌ خطأ، فكر مجدداً'}</strong><br>${qData.why}`;
         f.style.display = 'block';
         document.getElementById('next-btn').classList.remove('hidden');
     }
 
-    function loadNextQuestion() { currentQ++; loadQuestion(); }
+    function loadNextQuestion() {
+        currentQ++;
+        loadQuestion();
+    }
 
     function finishQuiz() {
         document.getElementById('quiz-page').classList.add('hidden');
         document.getElementById('result-page').classList.remove('hidden');
         const name = document.getElementById('studentName').value;
         document.getElementById('score-text').innerHTML = `المتحدي: ${name}<br>النتيجة: ${score} من 20`;
+        
         const sum = document.getElementById('quiz-summary');
+        sum.innerHTML = '';
         userAnswers.forEach((ans, i) => {
             const d = document.createElement('div');
             d.className = `summary-item ${ans.isCorrect ? 'summary-correct' : 'summary-wrong'}`;
